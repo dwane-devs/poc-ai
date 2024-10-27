@@ -12,6 +12,9 @@ A modern, multimodal chat application built with Next.js, TypeScript, and LangCh
 - 🔍 Tool integration support (search and database queries)
 - 🧵 Thread-based conversation management
 
+<img width="711" alt="image" src="https://github.com/user-attachments/assets/3f3b6518-4318-4f9f-9065-e09a39fea9e5">
+
+
 ## Tech Stack
 
 - **Frontend**:
