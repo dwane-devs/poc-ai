@@ -24,9 +24,42 @@ export const sqlDBSearchTool = new DynamicStructuredTool({
         filename: path.resolve(process.cwd(), dbPath),
         driver: sqlite3.Database
       });
+      //
 
       // Execute query
       const results = await db.all(query);
+
+      if (!results) {
+        // Create the users table
+        await db.exec(`
+          -- Create the users table
+            CREATE TABLE users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT NOT NULL UNIQUE,
+                email TEXT NOT NULL UNIQUE,
+                first_name TEXT,
+                last_name TEXT,
+                birthday DATE,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            );
+
+            -- Create an index on the username and email columns for faster lookups
+            CREATE INDEX idx_username ON users (username);
+            CREATE INDEX idx_email ON users (email);
+
+            -- Insert dummy data
+            INSERT INTO users (username, email, first_name, last_name, birthday)
+            VALUES 
+            ('john_doe', 'john.doe@example.com', 'John', 'Doe', '1990-02-12'),
+            ('jane_doe', 'jane.doe@example.com', 'Jane', 'Doe', '1995-08-25'),
+            ('alice_smith', 'alice.smith@example.com', 'Alice', 'Smith', '1980-01-01'),
+            ('bob_johnson', 'bob.johnson@example.com', 'Bob', 'Johnson', '1985-04-15'),
+            ('charlie_brown', 'charlie.brown@example.com', 'Charlie', 'Brown', '1992-10-31');
+        `);
+        console.log("Created 'users' table.");
+      } else {
+        console.log("'users' table already exists.");
+      }
       
       // Close connection
       await db.close();
